@@ -1,13 +1,5 @@
 
-use session3;
-ALTER TABLE orders DROP FOREIGN KEY orders_ibfk_1;
-ALTER TABLE orderdetail DROP FOREIGN KEY orderdetail_ibfk_1;
-ALTER TABLE orderdetail DROP FOREIGN KEY orderdetail_ibfk_2;
-drop table if exists customers;
-drop table if exists orders;
-drop table if exists products;
-drop table if exists orderDetail;
-#BT2
+
 create table customers(
                           cid int primary key auto_increment,
                           cName varchar (255),
@@ -33,8 +25,6 @@ CREATE TABLE orderDetail (
                              FOREIGN KEY (oId) REFERENCES orders(oId),
                              FOREIGN KEY (pId) REFERENCES products(pId)
 );
-
-
 insert into customers(cName, cAge) values
                                        ('Minh Quan', 10),
                                        ('Ngoc Oanh', 20),
@@ -56,31 +46,62 @@ insert into orderDetail(oId, pId, odQuantity) values
                                                   (1,4,2),
                                                   (2,1,1),
                                                   (3,1,8),
-                                                  (3,0,0),
                                                   (2,5,4),
                                                   (2,3,3);
 
-SELECT * FROM session3.orderdetail;
-select oId, products.* , odQuantity
-from orderdetail join products ON orderdetail.oId = products.pId;
+use session4;
 
-select orders.oId, customers.cName
+SELECT * FROM orders;
+-- Hiển thị tất cả customer có đơn hàng trên 150000
+select * from orders
+where oTotalPrice > 150000;
+
+SELECT * FROM products;
+-- Hiển thị sản phẩm có giá tiền lớn nhất
+select products.*, MAX(pPrice)
+from products
+group by pId
+having MAX(pPrice) = (
+    select MAX(pPrice)
+    from products
+    group by pId
+    order by MAX(pPrice) DESC limit 1
+    );
+
+SELECT * FROM session4.orders;
+-- Hiển thị tất cả đơn hàng có tổng giá tiền lớn nhất
+select orders.oId, customers.cName, MAX(oTotalPrice) as biggest_total
+from orders
+         JOIN customers ON orders.cId = customers.cId
+group by orders.oId, customers.cName
+having MAX(oTotalPrice)= (
+-- đơn hàng có tổng giá tiền lớn nhất (
+    select MAX(oTotalPrice) from orders
+    group by orders.oId
+    order by MAX(oTotalPrice) DESC limit 1
+-- )
+    );
+
+SELECT * FROM orderdetail;
+-- Hiển thị sản phẩm chưa được bán cho bất cứ ai
+SELECT * FROM orderdetail;
+select products.pId, pName as sản_phẩm_chưa_bán
+from products
+         LEFT JOIN orderdetail ON orderdetail.pId= products.pId
+where orderdetail.odQuantity is NULL;
+
+-- Hiển thị tất cả đơn hàng mua trên 2 sản phẩm
+SELECT * FROM orderdetail where odQuantity >2;
+
+-- Hiển thị người dùng nào mua nhiều sản phẩm “Bep Dien” --> "dieu hoa" nhất
+-- odQuantity lớn nhất của 3.Dieu hoa
+select orderdetail.*, customers.cName, MAX(odQuantity)
 from orderdetail
+-- người mua
          JOIN orders ON orderdetail.oId = orders.oId
-         JOIN customers ON orders.cId = customers.cid
-where orderdetail.odQuantity = 0;
-
-select orders.oDate, orders.oId, SUM(orderdetail.odQuantity * products.pPrice) total_price
-from orderdetail
-         join orders ON orderdetail.oId = orders.oId
-         JOIN products ON orderdetail.pId = products.pId
-group by orders.oId, orders.oDate
+         JOIN customers ON customers.cid = orders.cId
+-- sp la dieu hoa
+where pId = 3
+group by oId, pId, customers.cName
+order by MAX(odQuantity) DESC limit 1
 ;
-
-
-select cName
-from customer
-where cid not in (
-    select cid
-    from orders
-);
