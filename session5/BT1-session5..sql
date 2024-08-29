@@ -1,5 +1,5 @@
-
-
+#Bt1
+use session5;
 create table customers(
                           cid int primary key auto_increment,
                           cName varchar (255),
@@ -48,72 +48,40 @@ insert into orderDetail(oId, pId, odQuantity) values
                                                   (3,1,8),
                                                   (2,5,4),
                                                   (2,3,3);
+-- 1.Tạo view hiển thị tất cả customer:
+create view view_customer as
+select * from customers;
 
-use session4;
+-- 2.Tạo view hiển thị tất cả order có oTotalPrice trên 150000:
+create view view_orders_above_150000 AS
+select * from orders 
+where orders.oTotalPrice > 150000;
 
-SELECT * FROM orders;
--- Hiển thị tất cả customer có đơn hàng trên 150000
-select * from orders
-where oTotalPrice > 150000;
+-- 3.Đánh index cho bảng customers ở cột cName:
+create index idx_customer_name ON customers(cName);
+-- 4.Đánh index cho bảng products ở cột pName:
+create index idx_product_name ON products(pName);
 
-SELECT * FROM products;
--- Hiển thị sản phẩm có giá tiền lớn nhất
-select products.*, MAX(pPrice)
-from products
-group by pId
-having MAX(pPrice) = (
-    select MAX(pPrice)
-    from products
-    group by pId
-    order by MAX(pPrice) DESC limit 1
-    );
+-- 5.Tạo stored procedure hiển thị ra đơn hàng có tổng tiền bé nhất:
+delimiter //
+create procedure order_with_min_total_price()
+begin
+select * from orders order by oTotalPrice ASc limit 1;
+end //
+delimiter ;
 
-
-SELECT * FROM session4.orders;
--- Hiển thị tất cả đơn hàng có tổng giá tiền lớn nhất
-select orders.oId, customers.cName, MAX(oTotalPrice) as biggest_total
-from orders
-         JOIN customers ON orders.cId = customers.cId
-group by orders.oId, customers.cName
-having MAX(oTotalPrice)= (
--- đơn hàng có tổng giá tiền lớn nhất (
-    select MAX(oTotalPrice) from orders
-    group by orders.oId
-    order by MAX(oTotalPrice) DESC limit 1
--- )
-    );
--- Hiển thị tất cả đơn hàng có tổng giá tiền lớn nhất (SỬA BÀI)
-select o.oId, o.cId, o.oDate, sum(od.odQuantity * p.pPrice)  as `tong tien tung bill`
-from orders o
-         join orderDetail od on o.oId = od.oId
-         join products p on p.pId = od.pId
-group by od.oId, o.cId, o.oDate
-order by `tong tien tung bill` DESC
-    limit 1
-;
-
-
-SELECT * FROM orderdetail;
--- Hiển thị sản phẩm chưa được bán cho bất cứ ai
-SELECT * FROM orderdetail;
-select products.pId, pName as sản_phẩm_chưa_bán
-from products
-         LEFT JOIN orderdetail ON orderdetail.pId= products.pId
-where orderdetail.odQuantity is NULL;
-
-
--- Hiển thị tất cả đơn hàng mua trên 2 sản phẩm
-SELECT * FROM orderdetail where odQuantity >2;
--- Hiển thị người dùng nào mua nhiều sản phẩm “Bep Dien” --> "dieu hoa" nhất
--- odQuantity lớn nhất của 3.Dieu hoa
-select orderdetail.*, customers.cName, MAX(odQuantity)
-from orderdetail
--- người mua
-         JOIN orders ON orderdetail.oId = orders.oId
-         JOIN customers ON customers.cid = orders.cId
--- sp la dieu hoa
-where pId = 3
-group by oId, pId, customers.cName
-order by MAX(odQuantity) DESC limit 1
-;
-
+-- 6. Tạo stored procedure hiển thị người dùng nào mua sản phẩm "May Giat" ít nhất:
+DELIMITER //
+CREATE PROCEDURE get_customer_least_purchased_washing_machine()
+BEGIN
+ SELECT c.cId, c.cName, SUM(od.odQuantity) AS total_quantity
+    FROM customers c
+    JOIN orders o ON c.cid = o.cId
+    JOIN orderDetail od ON o.oId = od.oId
+    JOIN products p ON od.pId = p.pId
+    WHERE p.pName = 'May giat'
+    GROUP BY c.cId, c.cName
+    ORDER BY total_quantity ASC
+    LIMIT 1;
+END //
+DELIMITER ;

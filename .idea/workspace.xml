@@ -5,15 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="114e1d01-d8e8-42a8-b82e-0251ea464fa9" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/Session3/BT4.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Session3/BT5.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Session4/BT1.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Session4/BT2.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Session4/BT3.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/Session4/tets.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Session4.sql" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Session3/BT2.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/Session3/BT2.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Session4/BT2.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/Session4/BT2.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -101,7 +94,9 @@
       <workItem from="1724678403736" duration="1362000" />
       <workItem from="1724727778495" duration="5934000" />
       <workItem from="1724769464515" duration="2139000" />
-      <workItem from="1724809443155" duration="12333000" />
+      <workItem from="1724809443155" duration="12755000" />
+      <workItem from="1724895769632" duration="9115000" />
+      <workItem from="1724947537451" duration="1566000" />
     </task>
     <servers />
   </component>
