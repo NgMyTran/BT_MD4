@@ -1,5 +1,13 @@
 #Bt1
 use session5;
+ALTER TABLE orders DROP FOREIGN KEY orders_ibfk_1;
+ALTER TABLE orderDetail DROP FOREIGN KEY orderDetail_ibfk_1;
+ALTER TABLE orderDetail DROP FOREIGN KEY orderDetail_ibfk_2;
+drop table if exists customers;
+drop table if exists orders;
+drop table if exists products;
+drop table if exists orderDetail;
+
 create table customers(
                           cid int primary key auto_increment,
                           cName varchar (255),
@@ -53,8 +61,9 @@ create view view_customer as
 select * from customers;
 
 -- 2.Tạo view hiển thị tất cả order có oTotalPrice trên 150000:
+drop view if exists view_orders_above_150000;
 create view view_orders_above_150000 AS
-select * from orders 
+select * from session4.orders 
 where orders.oTotalPrice > 150000;
 
 -- 3.Đánh index cho bảng customers ở cột cName:
@@ -66,7 +75,7 @@ create index idx_product_name ON products(pName);
 delimiter //
 create procedure order_with_min_total_price()
 begin
-select * from orders order by oTotalPrice ASc limit 1;
+select * from session4.orders order by oTotalPrice ASc limit 1;
 end //
 delimiter ;
 
@@ -75,10 +84,10 @@ DELIMITER //
 CREATE PROCEDURE get_customer_least_purchased_washing_machine()
 BEGIN
  SELECT c.cId, c.cName, SUM(od.odQuantity) AS total_quantity
-    FROM customers c
-    JOIN orders o ON c.cid = o.cId
-    JOIN orderDetail od ON o.oId = od.oId
-    JOIN products p ON od.pId = p.pId
+    FROM session4.customers c
+    JOIN session4.orders o ON c.cid = o.cId
+    JOIN session4.orderDetail od ON o.oId = od.oId
+    JOIN session4.products p ON od.pId = p.pId
     WHERE p.pName = 'May giat'
     GROUP BY c.cId, c.cName
     ORDER BY total_quantity ASC

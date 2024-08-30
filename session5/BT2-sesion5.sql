@@ -1,7 +1,9 @@
 
 # BT2
+use session5;
 ALTER TABLE bill DROP FOREIGN KEY bill_ibfk_1;
 ALTER TABLE bill_detail DROP FOREIGN KEY bill_detail_ibfk_1;
+ALTER TABLE bill_detail DROP FOREIGN KEY bill_detail_ibfk_2;
 drop table if exists account;
 drop table if exists bill;
 drop table if exists productBt5;
@@ -67,7 +69,7 @@ BEGIN
     FROM account a
     JOIN bill b ON a.id = b.acc_id
     GROUP BY a.id
-    HAVING COUNT(b.id) >= 5;
+    HAVING COUNT(b.id) >= 2;
 END //
 DELIMITER ;
 
@@ -107,23 +109,18 @@ CREATE PROCEDURE add_account(
 BEGIN
     INSERT INTO account (username, password, address)
     VALUES (p_username, p_password, p_address);
-    
     SET p_new_id = LAST_INSERT_ID();
 END //
 DELIMITER ;
 
 -- 5. Tạo stored procedure truyền vào bill_id và hiển thị tất cả bill_detail của bill_id đó:
 DELIMITER //
-CREATE PROCEDURE add_account(
-    IN p_username VARCHAR(100),
-    IN p_password VARCHAR(255),
-    IN p_address VARCHAR(255),
-    OUT p_new_id INT
+CREATE PROCEDURE get_bill_detail(
+    IN bill_deltail_id int
 )
 BEGIN
-    INSERT INTO account (username, password, address)
-    VALUES (p_username, p_password, p_address);
-    SET p_new_id = LAST_INSERT_ID();
+  Select * from bill_detail
+  where bill_deltail_id = bill_id;
 END //
 DELIMITER ;
 
@@ -139,7 +136,6 @@ CREATE PROCEDURE add_bill(
 BEGIN
     INSERT INTO bill (bill_type, acc_id, created, auth_date)
     VALUES (p_bill_type, p_acc_id, p_created, p_auth_date);
-    
     SET p_new_bill_id = LAST_INSERT_ID();
 END //
 DELIMITER ;

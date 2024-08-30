@@ -64,6 +64,16 @@ INSERT INTO Mark (subject_id, student_id, point, exam_time) VALUES
                                                                 (3, 3, 10, '2024-02-11');
                                                                 
 # Tạo store procedure lấy ra tất cả lớp học có số lượng học sinh lớn hơn 5
+DELIMITER //
+CREATE PROCEDURE get_class_more_than_5_student()
+BEGIN
+    SELECT c.id, c.class_name, COUNT(st.id) AS total_student
+    FROM class c
+    JOIN Student st ON c.id = st.class_id
+    GROUP BY c.id, c.class_name
+    HAVING total_student > 2;
+END //
+DELIMITER ;
 
 #Tạo store procedure hiển thị ra danh sách môn học có điểm thi là 10
 

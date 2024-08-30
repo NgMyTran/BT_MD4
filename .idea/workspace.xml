@@ -6,7 +6,7 @@
   <component name="ChangeListManager">
     <list default="true" id="114e1d01-d8e8-42a8-b82e-0251ea464fa9" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Session4/BT2.sql" beforeDir="false" afterPath="$PROJECT_DIR$/src/Session4/BT2.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/session5/BT2-sesion5.sql" beforeDir="false" afterPath="$PROJECT_DIR$/session5/BT2-sesion5.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -73,6 +73,13 @@
       <recent name="C:\Users\TRAN\INTELLIJ\MD4-DATABASE\Session2" />
     </key>
   </component>
+  <component name="RunManager">
+    <configuration name="BT1-session5..sql" type="DatabaseScript" editBeforeRun="true" nameIsGenerated="true">
+      <script-file value="$PROJECT_DIR$/session5/BT1-session5..sql" />
+      <script-mode>FILE</script-mode>
+      <method v="2" />
+    </configuration>
+  </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
@@ -97,6 +104,8 @@
       <workItem from="1724809443155" duration="12755000" />
       <workItem from="1724895769632" duration="9115000" />
       <workItem from="1724947537451" duration="1566000" />
+      <workItem from="1724950115264" duration="277000" />
+      <workItem from="1724982385214" duration="4124000" />
     </task>
     <servers />
   </component>
